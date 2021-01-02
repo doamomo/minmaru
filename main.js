@@ -104,7 +104,10 @@ jQuery(function($){
     //チュートリアルステージ
     function tutorial(){
      //   alert("tutorial");
-        
+     $(".upper-box-text").html("敵:かかしさん<br>体:50 攻:10 防:5");
+    //敵画像の表示
+    $("img").attr("src", "./gif/kakasi.gif");
+     battle(200,"tutorial");
     }
 
     //ステージ1
@@ -250,7 +253,8 @@ jQuery(function($){
                             stage1(hp,ap,dp,point);
                         break
                         case "tutorial":
-                            tutorial();
+                            $(".downer-box-text").text("かかしが現れた");
+                            tutorial(hp,ap,dp,point);
                         break
                         case "stage2":
                             $(".downer-box-text").text("遺跡の守護者が現れた");
@@ -320,6 +324,198 @@ jQuery(function($){
                         audio.play();
                     break
                 }
+            }
+
+            //チュートリアルステージ処理
+            function tutorial(hp,ap,dp,point){
+                let button = 0;
+                let ehp = 50;
+                let eap = 10;
+                let edp = 5;
+                let damage = 0;
+                let deffence = 0;
+                let count = 0;
+                let turn = 0;
+                $("<button class='next'>next</button>").appendTo(".center-box");
+
+                //チュートリアルのスキル処理
+                function enemySkill0(){
+                    if(hp <= 3){
+                        hp = 0;
+                        button = 110;
+                    }else{
+                        hp -= 3;
+                    }
+                    $(".downer-box-text").html(`Turn${turn}:かかしのスキル発動<br>仕込み矢<br>プレイヤーに３のダメージを与えた！`);
+                    status(hp,ap,dp,ehp,eap,edp);
+                }
+
+                //敵からのダメージ演出
+                function deffence0(){
+                    deffence = eap - dp;
+                    if(deffence > 0){
+                        hp -= deffence;
+                        if(hp <= 0){
+                            button = 110;
+                            hp = 0;
+                        }
+                    }else{
+                        deffence = 0;
+                    }
+                    status(hp,ap,dp,ehp,eap,edp);
+                    $(".downer-box-text").html(`Turn${turn}:敵の攻撃。${deffence}のダメージを受けた！`);
+                }
+
+                //ダメージ演出
+                function damage0(){
+                    damage = ap - edp;
+                    if(damage > 0){
+                        ehp -= damage;
+                        if(ehp <= 0){
+                            //次のボタン判定でクリアにする
+                            button = 999;
+                            ehp = 0;
+                        }
+                    }else{
+                        damage = 0;
+                    }
+                    status(hp,ap,dp,ehp,eap,edp);
+                    $(".downer-box-text").html(`Turn${turn}:プレイヤの攻撃。${damage}のダメージを与えた！`);
+                }
+
+                $(".next").on("click",function(){
+                    //ボタンを押した回数をカウント
+                    
+                    //何ターン目か計算して代入
+                    turn = Math.floor(button / 10);
+                    //ターン中のどの処理かを判断する値を代入
+                    count = button % 10;
+
+                    //0ターンで分岐
+                    if(turn === 0){
+                        switch(count){
+                            case 0:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("値1で体力1を割り振れます<br>値4で攻撃1、値7で防御1<br>矢印キーで割り振ってから戦闘します");
+                            break
+                            case 1:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("戦闘ではまず敵のスキルが発動します<br>その後敵の攻撃<br>敵攻撃-自防御 の値がダメージです");
+                            break
+                            case 2:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("そのあと自分の攻撃になります<br>自攻撃-敵防御 が敵体力から減らされます");
+                            break
+                            case 3:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("勝利条件は、敵の体力を０にすること<br>敗北条件は、自分の体力が０になるか<br>１０ターン経過時、敵を倒せなかった場合です");
+                            break
+                            case 4:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("ちなみに全部の値を始めに<br>割り振らず、余らせても大丈夫です<br>では模擬戦闘スタート");
+                                button = 9;
+                            break
+                        }
+                    }else if(turn === 11){
+                        //ゲームオーバ処理
+                        switch(count){
+                            case 0:
+                                $(".downer-box-text").html(`10ターン以内に倒すことができなかった…`);
+                            break
+                            case 1:
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit20.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $(".downer-box-text").html("敗北しました、また試してみてください");
+                                $(".upper-box-text").html("ＧＡＭＥＯＶＥＲ");
+                            break
+                            case 2:
+                                $(".downer-box-text").html(`敵を倒す方法は一つではないかもしれません`);
+                            break
+                            case 3:
+                                $(".downer-box-text").html(`頑張ってください`);
+                            break
+                            case 4:
+                                
+                                $(".upper-box-text").html("");
+                                $(".downer-box-text").html("");
+                                $(".next").remove();
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $("img").attr("src","");
+                                stageSelect();
+                        
+                            break
+                        }
+                        
+
+                    }else if(turn === 100){
+                        //クリア処理
+                        switch(count){
+                            case 0:
+                                $(".upper-box-text").text("チュートリアル CLERE");
+                                $(".downer-box-text").text("かかしを倒した");
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit13.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                            break
+                            case 1:
+                                $(".downer-box-text").html("このように敵を倒すことでクリアとなります");
+                            break
+                            case 2:
+                                $(".downer-box-text").html("敵のスキルは複数存在したり<br>特定条件でしか発動しない<br>ものもあるようです");
+                            break
+                            case 3:
+                                $(".downer-box-text").html("健闘を祈ります");
+                            break
+                            case 4:
+                                $(".upper-box-text").html("");
+                                $(".downer-box-text").html("");
+                                $(".next").remove();
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $("img").attr("src","");
+                                stageSelect();
+                            break
+                        }
+
+                    }else if(turn >= 1){
+                        switch(count){
+                            case 0:
+                                
+                                    $(".downer-box-text").html("かかしが攻撃してくるようだ！！");
+                                
+                                
+                            break
+                            case 1:
+                                enemySkill0();
+                                
+                            break
+                            case 2:
+                                deffence0();
+                            break
+                            case 3:
+                                damage0();
+                                if(button === 999){
+
+                                }else{
+                                    button += 6
+                                }
+                            break
+                        }
+                    }
+                    button++;
+                });
             }
 
             //ステージ3処理
@@ -1078,9 +1274,16 @@ jQuery(function($){
                 if(way === 0){
                     if(digit === 0){
                         if(hitPoint1 >= 1){
-                            
-                            maxPoint = maxPoint + 100;
-                            hitPoint1--;
+                            if(hitPoint2 === 0 && hitPoint3 === 0){
+                                maxPoint = maxPoint + 99;
+                                hitPoint1--;
+                                
+                                hitPoint3 = 1;
+                            }else{
+                                maxPoint = maxPoint + 100;
+                                hitPoint1--;
+
+                            }
                             
                         }
                     }else if(digit === 1){
@@ -1089,12 +1292,19 @@ jQuery(function($){
 
                                 hitPoint1--;
                                 hitPoint2 = 9;
-
+                                maxPoint = maxPoint + 10;
                             }else{
+                                if(hitPoint1 === 0 && hitPoint3 === 0){
+                                    hitPoint3 = 1;
+                                    hitPoint2--;
+                                    maxPoint = maxPoint + 9;
+                                }else{
+                                    hitPoint2--;
+                                    maxPoint = maxPoint + 10;
 
-                                hitPoint2--;
+                                }
                             }
-                            maxPoint = maxPoint + 10;
+                            
                             
                         }
 
