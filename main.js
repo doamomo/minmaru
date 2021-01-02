@@ -586,6 +586,7 @@ jQuery(function($){
                     }else{
                         life = dp - ap;
                     }
+                    ehp += life;
 
                     $(".downer-box-text").html(`Turn${turn}:天竜のスキル『再生』<br>プレイヤーの能力値（攻or防）の差を吸収<br>天竜の体力に加えた！`);
                     status(hp,ap,dp,ehp,eap,edp);
