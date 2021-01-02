@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+.outside{
+    width: 420px;
+    height: 434px;
+    border: 7px double black;
+    background-color: silver;
+}
+.upper-box{
+    margin-left: 6px;
+    margin-top: 6px;
+    width: 400px;
+    height: 100px;
+    border: 4px double black;
+}
+.upper-box-text{
+    display: inline;
+    font-size: 32px;
+}
+
+.center-box{
+    height: 200px;
+    width: 400px;
+}
+img{
+    display: inline-block;
+    padding-left: 100px;
+   
+}
+#start{
+    display: inline;
+    height: 40px;
+    width: 120px;
+    margin-top: 100px;
+    margin-left: 150px;
+
+}
+.skip{
+    display: inline;
+    margin-left: 340px;
+    margin-top: 150px;
+    width: 70px;
+    height: 30px;
+    bottom: 10px;
+    right: 10px;
+}
+.stage{
+    display: inline;
+    height: 40px;
+    width: 120px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.parameter span{
+    background-color: silver;
+}
+.downer-box{
+    padding: 5px;
+    margin-left: 6px;
+    margin-top: 6px;
+    height: 90px;
+    width: 390px;
+    border: 4px double black;
+}
+.downer-box-text{
+  
+    display: inline;
+    font-size: 18px;
+}
+.downer-box-text p{
+    margin: 0;
+}
+.bgm{
+    margin-top: 10px;
+}
+.next{
+    
+    margin-left: 20px;
+    width: 70px;
+    height: 30px;
+    display: inline-block;
+    position: absolute;
+    top: 300px;
+}
+#buttonSelect{
+    display: inline;
+    height: 0;
+}
