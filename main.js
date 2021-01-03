@@ -55,6 +55,8 @@ jQuery(function($){
         $("<button class='stage' id='stage2'>stage2</button>").appendTo("#buttonSelect");
        // $("<br>").appendTo("#buttonSelect");
         $("<button class='stage' id='stage3'>stage3</button>").appendTo("#buttonSelect");
+        $("<button class='stage' id='stage4'>stage4</button>").appendTo("#buttonSelect");
+        $("<button class='stage' id='stage5'>stage5</button>").appendTo("#buttonSelect");
         
         $(".stage").on("click",function(){
 
@@ -94,6 +96,12 @@ jQuery(function($){
             break
             case "stage3":
                 stage3();
+            break
+            case "stage4":
+                stage4();
+            break
+            case "stage5":
+                stage5();
             break
             default:
                 alert("エラーです");
@@ -143,7 +151,7 @@ jQuery(function($){
           battle(300,"stage2");
       }
 
-      function stage3(){
+    function stage3(){
         //  alert("stage1");
           $(".upper-box-text").html("敵:復活の天竜<br>体:5 攻:10 防:10");
           audio.pause();
@@ -157,7 +165,42 @@ jQuery(function($){
   
           //戦闘パラメータを与え、関数を実行する
           battle(300,"stage3");
-      }
+    }
+
+    function stage4(){
+            //  alert("stage1");
+            alert("暗証番号3。エラーです、アジトの扉は開きません");
+            alert("暗証番号4。正解です、アジトの暗証番号、よくわかったな！？");
+              $(".upper-box-text").html("敵:殺人鬼<br>体:75 攻:30 防:15");
+              audio.pause();
+              audio = new Audio("./bgm/bgm_maoudamashii_8bit15.mp3");
+              audio.loop = true;
+              audio.volume = bmgVol;
+              audio.play();
+      
+              //敵画像の表示
+              $("img").attr("src", "./gif/twin2.gif");
+      
+              //戦闘パラメータを与え、関数を実行する
+              battle(450,"stage4");
+    }
+
+    function stage5(){
+        //  alert("stage1");
+        alert("半端な気持ちで挑むなら、消すわよ");
+          $(".upper-box-text").html("敵:水晶の魔女<br>体:666 攻:777 防:999");
+          audio.pause();
+          audio = new Audio("./bgm/bgm_maoudamashii_8bit04.mp3");
+          audio.loop = true;
+          audio.volume = bmgVol;
+          audio.play();
+  
+          //敵画像の表示
+          $("img").attr("src", "./gif/magic2.gif");
+  
+          //戦闘パラメータを与え、関数を実行する
+          battle(300,"stage5");
+}
 
     //戦闘パラメーター設定
     function battle(point,stage){
@@ -264,6 +307,14 @@ jQuery(function($){
                             $(".downer-box-text").text("天空竜が現れた");
                             stage3(hp,ap,dp,point);
                         break
+                        case "stage4":
+                            $(".downer-box-text").text("殺人鬼兄弟が現れた");
+                            stage4(hp,ap,dp,point);
+                        break
+                        case "stage5":
+                            $(".downer-box-text").text("99の水晶と共に、魔法使いが現れた");
+                            stage5(hp,ap,dp,point);
+                        break
                     }
                 }
             });
@@ -309,21 +360,594 @@ jQuery(function($){
                 $(".upper-box-text").html("ＧＡＭＥＯＶＥＲ");
                 $(".next").remove();
             }
-            //クリア演出
-            function clear(){
-                switch(battleStage){
-                    case "stage1":
-                        
-                        $(".upper-box-text").text("STAGE1 CLERE");
-                        $(".downer-box-text").text("スライムLV50を倒した");
-                        $(".next").remove();
-                        audio.pause();
-                        audio = new Audio("./bgm/bgm_maoudamashii_8bit13.mp3");
-                        audio.loop = true;
-                        audio.volume = bmgVol;
-                        audio.play();
-                    break
+
+            //ステージ5処理
+            function stage5(hp,ap,dp,point){
+                let button = 0;
+                let ehp = 666;
+                let eap = 777;
+                let edp = 999;
+                let damage = 0;
+                let deffence = 0;
+                let count = 0;
+                let turn = 0;
+                $("<button class='next'>next</button>").appendTo(".center-box");
+
+                //魔女のスキル処理a
+                function enemySkill5a(){
+                    //余らせたPointを敵の全能力値に割り振る
+                    ehp += point;
+                    eap += point;
+                    edp += point;
+
+
+                 //   $(".downer-box-text").html(`Turn${turn}:天竜のスキル『強者復活』<br>プレイヤーの最も高い能力値を吸収し<br>天竜の最も低い能力値に加えた！`);
+                    status(hp,ap,dp,ehp,eap,edp);
                 }
+
+                //魔女のスキル処理b
+                function enemySkill5b(){
+                    if(ehp >= 1000){
+                        ehp -= 1000;
+                    }
+                    if(eap >= 1000){
+                        eap -= 1000;
+                    }
+                    if(edp >= 1000){
+                        edp -= 1000;
+                    }
+                 
+                    status(hp,ap,dp,ehp,eap,edp);
+                    if(ehp === 0){
+                        button = 999;
+                    }
+                }
+
+                //魔女のスキル処理c
+                function enemySkill5c(){
+                    eap = 13;
+                 
+                    status(hp,ap,dp,ehp,eap,edp);
+                    
+                }
+
+                //スキルd処理
+                function enemySkill5d(){
+                    ehp += ap;
+                 
+                    status(hp,ap,dp,ehp,eap,edp);
+                    if(ehp > 1000){
+                        ehp -= 1000;
+                        $(".downer-box-text").html(`Turn${turn}:増幅水晶で増加した体力が溢れ<br>同時に敵の体力が減少した！<br>増加した体力から1000を減らす`);
+                        status(hp,ap,dp,ehp,eap,edp);
+                    }else if(ehp === 1000){
+                        $(".downer-box-text").html(`Turn${turn}:増幅水晶で増加した体力が溢れ<br>……1000となった<br>……敵は『自滅』した……！！！`);
+                        ehp -= 1000;
+                        status(hp,ap,dp,ehp,eap,edp);
+                        audio.pause();
+                        button = 999;
+                    }
+                }
+
+                //敵からのダメージ演出
+                function deffence5(){
+                    deffence = eap - dp;
+                    if(deffence > 0){
+                        hp -= deffence;
+                        if(hp <= 0){
+                            button = 110;
+                            hp = 0;
+                        }
+                    }else{
+                        deffence = 0;
+                    }
+                    status(hp,ap,dp,ehp,eap,edp);
+                    $(".downer-box-text").html(`Turn${turn}:敵の攻撃。${deffence}のダメージを受けた！`);
+                }
+
+                //ダメージ演出
+                function damage5(){
+                    damage = ap - edp;
+                    if(damage > 0){
+                        ehp -= damage;
+                        if(ehp <= 0){
+                            //次のボタン判定でクリアにする
+                            button = 999;
+                            ehp = 0;
+                        }
+                    }else{
+                        damage = 0;
+                    }
+                    status(hp,ap,dp,ehp,eap,edp);
+                    $(".downer-box-text").html(`Turn${turn}:プレイヤの攻撃。${damage}のダメージを与えた！`);
+                }
+
+                $(".next").on("click",function(){
+                    //ボタンを押した回数をカウント
+                    
+                    //何ターン目か計算して代入
+                    turn = Math.floor(button / 10);
+                    //ターン中のどの処理かを判断する値を代入
+                    count = button % 10;
+
+                    //0ターンで分岐
+                    if(turn === 0){
+                        switch(count){
+                            case 0:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("……警告はしたわ");
+                            break
+                            case 1:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("貴方はここに来るまでに<br>沢山の困難を乗り越えてきたかもしれない<br>案外そうではないかもしれない");
+                            break
+                            case 2:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("――ごめんなさいね、私は……<br>貴方を倒し、より高次元の存在に<br>ならないといけないの");
+                            break
+                            case 3:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("貴方の知らない次の世界に辿り着くの<br>この世界は陳腐なものだらけ<br>……例えば、貴方のように");
+                               
+                            break
+                            case 4:
+                                $(".downer-box-text").html("……水晶起動。私を護りなさい");
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit07.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                button = 9;
+                            break
+                        }
+                    }else if(turn === 11){
+                        //ゲームオーバ処理
+                        switch(count){
+                            case 0:
+                                $(".downer-box-text").html(`10ターン以内に倒すことができなかった…`);
+                            break
+                            case 1:
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit20.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $(".downer-box-text").html("あなたは倒された…！！！");
+                                $(".upper-box-text").html("ＧＡＭＥＯＶＥＲ");
+                            break
+                            case 2:
+                                $(".downer-box-text").html(`貴方も所詮その程度<br>この世界も所詮この程度`);
+                            break
+                            case 3:
+                                $(".downer-box-text").html(`……なんてつまらない`);
+                            break
+                            case 4:
+                                
+                                $(".upper-box-text").html("");
+                                $(".downer-box-text").html("");
+                                $(".next").remove();
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $("img").attr("src","");
+                                stageSelect();
+                        
+                            break
+                        }
+                        
+
+                    }else if(turn === 100){
+                        //クリア処理
+                        switch(count){
+                            case 0:
+                                $(".upper-box-text").text("LAST STAGE CLERE");
+                                $(".downer-box-text").text("水晶の魔女を倒した");
+                                
+                            break
+                            case 1:
+                                $(".downer-box-text").html("なぜ、貴方にはわかったの？<br>私は限りなく不可能に近い道だけを<br>敷いたのに……");
+                            break
+                            case 2:
+                                $(".downer-box-text").html("この世界も案外捨てたものじゃ<br>なかったわ。あぁ、欲を言うなら");
+                                
+                            break
+                            case 3:
+                                $(".downer-box-text").html("私が死ぬ前に、貴方のような人に<br>……出会いたかったわ");
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit13.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                            break
+                            case 4:
+                                $(".downer-box-text").html("GAME CLEAR!!!");
+                            break
+                            case 5:
+                                $(".upper-box-text").html("");
+                                $(".downer-box-text").html("");
+                                $(".next").remove();
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $("img").attr("src","");
+                                stageSelect();
+                            break
+                        }
+
+                    }else if(turn === 1){
+                        switch(count){
+                            case 0:
+                                $(".downer-box-text").html(`Turn${turn}:スキル『あなたの弱さがわたしの強さ』<br>『余らせた力』を敵が吸収し<br>全能力値を上昇させた！！`); 
+                                enemySkill5a();
+                            break
+                            case 1:
+                                $(".downer-box-text").html(`Turn${turn}:魔法使いのスキル『わたしの脆さ』<br>敵の能力値が1000を超えた場合<br>その値から1000を減らす`); 
+                                enemySkill5b();
+                            break
+                            case 2:      
+                                if(edp <= 99){
+                                    $(".downer-box-text").html("敵の増幅水晶の力の源である<br>『敵防御力』が足りないため機能しない！<br>……また攻撃力が13に固定された！！"); 
+                                    enemySkill5c();
+                                }else{
+                                    $(".downer-box-text").html("敵は水晶の力で<br>己の生存力を増幅している！！");   
+                                    enemySkill5d();                           
+                                }
+                            break
+                            case 3:
+                                deffence5();
+                            break
+                            case 4:
+                                damage5();
+                                if(button === 999){
+
+                                }else{
+                                    button += 5
+                                }
+                            break
+                        }
+                    }else if(turn >= 1){
+                        switch(count){
+                            
+                            case 0:      
+                                if(edp <= 99){
+                                    $(".downer-box-text").html("敵の増幅水晶の力の源である<br>敵防御力が足りないため<br>機能しない！！"); 
+                                    enemySkill5c();
+                                }else{
+                                    $(".downer-box-text").html("敵は水晶の力で<br>己の生存力を増幅している！！");  
+                                    enemySkill5d();                             
+                                }
+                            break
+                            
+                            case 1:
+                                deffence5();
+                            break
+                            case 2:
+                                damage5();
+                                if(button === 999){
+
+                                }else{
+                                    button += 7
+                                }
+                            break
+                        }
+                    }
+                    button++;
+                });
+            }
+
+
+            //ステージ4処理
+            function stage4(hp,ap,dp,point){
+                let button = 0;
+                let ehp = 75;
+                let eap = 30;
+                let edp = 15;
+                let ehp1 = 75;
+                let eap1 = 30;
+                let edp1 = 15;
+                let ehp2 = 90;
+                let eap2 = 40;
+                let edp2 = 10;
+                let damage = 0;
+                let deffence = 0;
+                let count = 0;
+                let turn = 0;
+                //兄は２、弟は１
+                let which = 1;
+                //痛恨の一撃時に防御力を保存する
+                let diffenceP = 0;
+                $("<button class='next'>next</button>").appendTo(".center-box");
+
+                //殺人鬼のスキル処理a
+                function enemySkill4a(){
+                    
+                    if(turn % 2 === 0){
+                        ehp = ehp2;
+                        eap = eap2;
+                        edp = edp2;
+                        which = 2;
+                    }else if(turn % 2 === 1){
+                        ehp = ehp1;
+                        eap = eap1;
+                        edp = edp1;
+                        which = 1;
+                    }
+
+                    $(".downer-box-text").html(`Turn${turn}:殺人鬼のスキル『二人で一人』<br>敵対する相手がターンごとに入れ替わる<br>（倒すのはどちらかだけでよい）`);
+                    status(hp,ap,dp,ehp,eap,edp);
+                }
+
+                //殺人鬼のスキル処理b
+                function enemySkill4b(){
+                   
+                    $(".downer-box-text").html(`Turn${turn}:殺人鬼のスキル『護身術』<br>プレイヤーの攻撃力を読み取り<br>敵二人の体力を増強した！`);
+                    ehp += ap;
+                    ehp1 += ap;
+                    ehp2 += ap;
+                    status(hp,ap,dp,ehp,eap,edp);
+                }
+
+                function enemySkill4c(){
+                    $(".downer-box-text").html(`Turn${turn}:殺人鬼のスキル『痛恨の一撃』<br>プレイヤーの防御力が<br>このターン0になる！`);
+                    diffenceP = dp;
+                    dp = 0;
+                    status(hp,ap,dp,ehp,eap,edp);
+                }
+
+                function enemySkill4c2(){
+                    $(".downer-box-text").html(`Turn${turn}:殺人鬼のスキル『痛恨の一撃』<br>の効果が切れプレイヤーの防御力が復活！`);
+                    dp = diffenceP;
+                    status(hp,ap,dp,ehp,eap,edp);
+                }
+
+                //敵からのダメージ演出
+                function deffence4(){
+                    deffence = eap - dp;
+                    if(deffence > 0){
+                        hp -= deffence;
+                        if(hp <= 0){
+                            button = 110;
+                            hp = 0;
+                        }
+                    }else{
+                        deffence = 0;
+                    }
+                    status(hp,ap,dp,ehp,eap,edp);
+                    $(".downer-box-text").html(`Turn${turn}:敵の攻撃。${deffence}のダメージを受けた！`);
+                }
+
+                //ダメージ演出
+                function damage4(){
+                    damage = ap - edp;
+                    if(damage > 0){
+                        ehp -= damage;
+                        if(ehp > 0){
+                            if(which === 1){
+                                ehp1 = ehp;
+                            }else{
+                                ehp2 = ehp;
+                            }
+                        }else if(ehp <= 0){
+                            //次のボタン判定でクリアにする
+                            button = 999;
+                            ehp = 0;
+                        }
+                    }else{
+                        damage = 0;
+                    }
+                    status(hp,ap,dp,ehp,eap,edp);
+                    $(".downer-box-text").html(`Turn${turn}:プレイヤの攻撃。${damage}のダメージを与えた！`);
+                }
+
+                $(".next").on("click",function(){
+                    //ボタンを押した回数をカウント
+                    
+                    //何ターン目か計算して代入
+                    turn = Math.floor(button / 10);
+                    //ターン中のどの処理かを判断する値を代入
+                    count = button % 10;
+
+                    //0ターンで分岐
+                    if(turn === 0){
+                        switch(count){
+                            case 0:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("兄（右）……え？どうして人がいるのだ？弟よ");
+                            break
+                            case 1:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("弟（左）アジトのカギ閉めてなかったんじゃ？<br>あれほど、杏仁豆腐買った帰りには<br>カギ閉めろって言ったのに");
+                            break
+                            case 2:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("くそっ！オートロックにしとけばよかった！<br>今時なんで最新鋭の悪の組織のアジトが<br>カギをガチャガチャして閉める奴なのだ！");
+                            break
+                            case 3:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("知らんわ。迎撃するよ、先に行く");
+                                
+                            break
+                            case 4:
+                                status(hp,ap,dp,ehp,eap,edp);
+                                $(".downer-box-text").html("おお！頼もしいぞ！さすが我が弟！<br>兄貴もすぐ行くからな！");
+                                button = 9;
+                            break
+                            
+                        }
+                    }else if(turn === 11){
+                        //ゲームオーバ処理
+                        switch(count){
+                            case 0:
+                                $(".downer-box-text").html(`10ターン以内に倒すことができなかった…`);
+                            break
+                            case 1:
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit20.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $(".downer-box-text").html("あなたは倒された…！！！");
+                                $(".upper-box-text").html("ＧＡＭＥＯＶＥＲ");
+                            break
+                            case 2:
+                                $(".downer-box-text").html(`兄（右）さすが我々だ、正義気取りなど<br>けちょんけちょんのぼこっぼこに<br>してやればいいのだ`);
+                            break
+                            case 3:
+                                $(".downer-box-text").html(`弟（左）オートロックにする？こいつ何気に<br>金目の物持ってるよ`);
+                            break
+                            case 4:
+                                $(".downer-box-text").html(`なんと！！我がアジトにもようやく<br>『あいでぃー』の時代が来るのだな`);
+                            break
+                            case 5:
+                                $(".downer-box-text").html(`それを言うならITっしょ`);
+                            break
+                            case 6:
+                                
+                                $(".upper-box-text").html("");
+                                $(".downer-box-text").html("");
+                                $(".next").remove();
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $("img").attr("src","");
+                                stageSelect();
+                        
+                            break
+                        }
+                        
+
+                    }else if(turn === 100){
+                        //クリア処理
+                        switch(count){
+                            case 0:
+                                $(".upper-box-text").text("STAGE4 CLERE");
+                                $(".downer-box-text").text("殺人鬼を倒した");
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit13.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                            break
+                            case 1:
+                                $(".downer-box-text").html("兄（右）……弟よ、大丈夫か……？");
+                            break
+                            case 2:
+                                $(".downer-box-text").html("弟（左）……思ったより強かったね<br>仕方ない。");
+                            break
+                            case 3:
+                                $(".downer-box-text").html("……弟よ、杏仁豆腐、やるから生きろ<br>生クリームが乗ってるタイプなんだ<br>300円もしたんだぞ");
+                            break
+                            case 4:
+                                $(".downer-box-text").html("……あー、おいしそうだね。<br>兄貴ごめん、俺……ぐふっ");
+                            break
+                            case 5:
+                                $(".downer-box-text").html("……弟よ。出来の悪い兄貴ですまんな<br>あー。俺たちの悪事もここまでか<br>そこの強いやつ、お願いがある");
+                            break
+                            case 6:
+                                $(".downer-box-text").html("……弟を葬るのを手伝ってくれないか？<br>うんと奇麗なところにしてやりたい");
+                            break
+                            case 7:
+                                $(".upper-box-text").html("");
+                                $(".downer-box-text").html("");
+                                $(".next").remove();
+                                audio.pause();
+                                audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
+                                audio.loop = true;
+                                audio.volume = bmgVol;
+                                audio.play();
+                                $("img").attr("src","");
+                                stageSelect();
+                            break
+                        }
+
+                    }else if(turn === 1){
+                        switch(count){
+                            case 0:
+                                $(".downer-box-text").html("敵は素早く戦闘態勢を整えた！"); 
+                            break
+                            case 1:
+                                enemySkill4a();
+                            break
+                            case 2:
+                                enemySkill4b();
+                            break
+                            case 3:
+                                deffence4();
+                            break
+                            case 4:
+                                damage4();
+                                if(button === 999){
+
+                                }else{
+                                    button += 5
+                                }
+                            break
+                        }
+                    
+                    }else if(turn % 5 === 0){
+                        switch(count){
+                            case 0:
+                                $(".downer-box-text").html("弟（左）……ところで、二人で襲い掛かったほうが<br>早く倒せるんじゃね？"); 
+                            break
+                            case 1:
+                                $(".downer-box-text").html("兄（右）それはダメだ！！よく考えろ弟よ！<br>そんなのフェアじゃないぞ！！"); 
+                            break
+                            case 2:
+                                $(".downer-box-text").html("……仕方ない、本気で行くか"); 
+                            break
+                            case 3:                        
+                                $(".downer-box-text").html("敵は華麗な身のこなしで<br>ポジションが入れ替わる！！");                              
+                            break
+                            case 4:
+                                enemySkill4a();
+                            break
+                            case 5:
+                                enemySkill4c();
+                            break
+                            case 6:
+                                deffence4();
+                            break
+                        
+                            case 7:
+                                damage4();
+                                
+                            break
+                            case 8:
+                                enemySkill4c2();
+                                button += 1;
+                            break
+
+                        }
+                    }else if(turn >= 2){
+                        switch(count){
+                            case 0:                        
+                                $(".downer-box-text").html("敵は華麗な身のこなしで<br>ポジションが入れ替わる！！");                              
+                            break
+                            case 1:
+                                enemySkill4a();
+                            break
+                            
+                            case 2:
+                                deffence4();
+                            break
+                            case 3:
+                                damage4();
+                                if(button === 999){
+
+                                }else{
+                                    button += 6
+                                }
+                            break
+                        }
+                    }
+                    button++;
+                });
             }
 
             //チュートリアルステージ処理
@@ -588,7 +1212,7 @@ jQuery(function($){
                     }
                     ehp += life;
 
-                    $(".downer-box-text").html(`Turn${turn}:天竜のスキル『再生』<br>プレイヤーの能力値（攻or防）の差を吸収<br>天竜の体力に加えた！`);
+                    $(".downer-box-text").html(`Turn${turn}:天竜のスキル『再生』<br>プレイヤーの能力値（攻and防）の差を吸収<br>天竜の体力に加えた！`);
                     status(hp,ap,dp,ehp,eap,edp);
                 }
 
