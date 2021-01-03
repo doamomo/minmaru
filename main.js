@@ -18,7 +18,9 @@ jQuery(function($){
         audio.play();
         $(".outside").css("background-color", "#EEEEEE");
         $("#start").css("display", "none");
-        $("<button class='skip'>skip</button>").appendTo(".center-box");
+        $("img").attr("src", "./gif/map.gif");
+        $(".downer-box-text").html("≪ゲームの説明≫<br>自分の能力を自分で決め<br>死んで覚えて、次に活かし。戦いに勝利せよ");
+        $("<button class='skip'>next</button>").appendTo(".center-box");
         opMovie();
         
     });
@@ -43,6 +45,7 @@ jQuery(function($){
             $(".skip").remove();
             $(".upper-box-text").text("");
             $(".downer-box-text").text("");
+            $("img").attr("src", "");
             stageSelect();
 
         });
