@@ -1,6 +1,5 @@
 jQuery(function($){
-    //現在の表示
-    let status = "opening";
+
     //タイトルBGM設定
     let audio = new Audio("./bgm/bgm_maoudamashii_8bit21.mp3");
     audio.loop = true;
@@ -25,17 +24,6 @@ jQuery(function($){
         
     });
 
-    //戦闘速度の変更
-    $("#two").on("click", function(){
-        bt = 2;
-    });
-    $("#three").on("click", function(){
-        bt = 3;
-    });
-    $("#five").on("click", function(){
-        bt = 5;
-    });
-
     //オープニングムービー
     function opMovie(){
          //ムービースキップ
@@ -56,7 +44,6 @@ jQuery(function($){
         $("<button class='stage' id='tutorial'>チュートリアル</button>").appendTo("#buttonSelect");
         $("<button class='stage' id='stage1'>stage1</button>").appendTo("#buttonSelect");
         $("<button class='stage' id='stage2'>stage2</button>").appendTo("#buttonSelect");
-       // $("<br>").appendTo("#buttonSelect");
         $("<button class='stage' id='stage3'>stage3</button>").appendTo("#buttonSelect");
         $("<button class='stage' id='stage4'>stage4</button>").appendTo("#buttonSelect");
         $("<button class='stage' id='stage5'>stage5</button>").appendTo("#buttonSelect");
@@ -64,10 +51,7 @@ jQuery(function($){
         $(".stage").on("click",function(){
 
             let buttonPush = this.id;
-            //alert(buttonPush);
-
             stage(buttonPush);
-
         });
    }
 
@@ -85,7 +69,6 @@ jQuery(function($){
     });
 
     function stage(num){
-       // alert(num);
        $(".stage").remove();
         switch(num){
             case "tutorial":
@@ -114,11 +97,60 @@ jQuery(function($){
 
     //チュートリアルステージ
     function tutorial(){
-     //   alert("tutorial");
-     $(".upper-box-text").html("敵:かかしさん<br>体:50 攻:10 防:5");
-    //敵画像の表示
-    $("img").attr("src", "./gif/kakasi.gif");
-     battle(200,"tutorial");
+        //   alert("tutorial");
+        $(".upper-box-text").html("敵:かかしさん<br>体:50 攻:10 防:5");
+        //敵画像の表示
+        $("img").attr("src", "./gif/kakasi.gif");
+        //説明テキストの表示
+        tutorialText();
+    //battle(200,"tutorial");
+    }
+
+    //チュートリアルステージ前の説明テキスト
+    function tutorialText(){
+        let tutorialNumber = 0;
+        $("<button class='next'>next</button>").appendTo(".center-box");
+        $(".next").on("click",function(){
+            switch(tutorialNumber){
+                case 0:
+                    $(".downer-box-text").html("ようこそ。突然ですが、私は今からあなたに<br>この世界で戦う方法を教えます<br>");
+                break
+                case 1:
+                    $(".downer-box-text").html("この説明が終わったら、まず私と戦います<br>戦う前には必ず自分に与えられた<br>『値』を割り振ります");
+                break
+                case 2:
+                    $(".downer-box-text").html("それだけでおしまいです<br>よくわからなくても、まずはやってみましょう<br>値の割り振り方のルールだけお伝えしますね");
+                break
+                case 3:
+                  //  $(".upper-box-text").html("");
+                    $(".downer-box-text").html("値1で体力1を割り振れます<br>値4で攻撃1、値7で防御1<br>矢印キーで割り振ります。終わったらEnter");
+                break
+                case 4:
+                    
+                    $(".downer-box-text").html("戦闘ではまず敵のスキルが発動します<br>その後敵の攻撃<br>敵攻撃-自防御 の値がダメージです");
+                break
+                case 5:
+                    
+                    $(".downer-box-text").html("そのあと自分の攻撃になります<br>自攻撃-敵防御 が敵体力から減らされます");
+                break
+                case 6:
+                    
+                    $(".downer-box-text").html("勝利条件は、敵の体力を０にすること<br>敗北条件は、自分の体力が０になるか<br>１０ターン経過時、敵を倒せなかった場合です");
+                break
+                case 7:
+                    
+                    $(".downer-box-text").html("ちなみに全部の値を始めに<br>割り振らず、余らせても大丈夫です<br>では割り振りスタート！");
+                    
+                break
+                case 8:
+                    $(".downer-box-text").html("");
+                    $(".next").remove();
+                    battle(200,"tutorial");
+                break
+            }
+            tutorialNumber++;
+        });
+
     }
 
     //ステージ1
@@ -172,8 +204,9 @@ jQuery(function($){
 
     function stage4(){
             //  alert("stage1");
-            alert("暗証番号3。エラーです、アジトの扉は開きません");
-            alert("暗証番号4。正解です、アジトの暗証番号、よくわかったな！？");
+            alert("『悪の組織のアジト』入口自動音声「暗証番号をダイアルで選んでください」");
+            alert("ダイアルは1桁しかなかったので、貴方は適当に４にツマミを合わせた！");
+            alert("自動音声「正解です、アジトの暗証番号、よくわかったな！？」");
               $(".upper-box-text").html("敵:殺人鬼<br>体:75 攻:30 防:15");
               audio.pause();
               audio = new Audio("./bgm/bgm_maoudamashii_8bit15.mp3");
@@ -300,6 +333,7 @@ jQuery(function($){
                         break
                         case "tutorial":
                             $(".downer-box-text").text("かかしが現れた");
+                           // tutorialText(hp,ap,dp,point);
                             tutorial(hp,ap,dp,point);
                         break
                         case "stage2":
@@ -322,46 +356,12 @@ jQuery(function($){
                 }
             });
 
-            //skipボタン待ち
-            function skip(){
-                $("<button class='skip'>skip</button>").appendTo(".center-box");
-
-                $(".skip").on("click",function(){
-                    $(".skip").remove();
-                    return
-                });
-            }
+            
 
             //ステータス変化演出
             function status(hp,ap,dp,ehp,eap,edp){
                 $(".upper-box-text").html(`自分 HP:${hp}攻:${ap}防:${dp}<br>敵 HP:${ehp}攻:${eap}防:${edp}`);
                 return
-            }
-            //ダメージ演出
-            function damage(ap,ehp,edp,damage,button){
-                damage = ap - edp;
-                if(damage > 0){
-                    ehp -= damage;
-                    if(ehp <= 0){
-                        //次のボタン判定でクリアにする
-                        button = 999;
-                        ehp = 0;
-                    }
-                }else{
-                    damage = 0;
-                }
-                return ap,ehp,edp,damage,button
-            }
-            //ゲームオーバ演出
-            function gameover(){
-                audio.pause();
-                audio = new Audio("./bgm/bgm_maoudamashii_8bit20.mp3");
-                audio.loop = true;
-                audio.volume = bmgVol;
-                audio.play();
-                $(".downer-box-text").html("あなたは倒された…！！！");
-                $(".upper-box-text").html("ＧＡＭＥＯＶＥＲ");
-                $(".next").remove();
             }
 
             //ステージ5処理
@@ -383,8 +383,6 @@ jQuery(function($){
                     eap += point;
                     edp += point;
 
-
-                 //   $(".downer-box-text").html(`Turn${turn}:天竜のスキル『強者復活』<br>プレイヤーの最も高い能力値を吸収し<br>天竜の最も低い能力値に加えた！`);
                     status(hp,ap,dp,ehp,eap,edp);
                 }
 
@@ -1023,25 +1021,10 @@ jQuery(function($){
                         switch(count){
                             case 0:
                                 status(hp,ap,dp,ehp,eap,edp);
-                                $(".downer-box-text").html("値1で体力1を割り振れます<br>値4で攻撃1、値7で防御1<br>矢印キーで割り振ってから戦闘します");
-                            break
-                            case 1:
-                                status(hp,ap,dp,ehp,eap,edp);
-                                $(".downer-box-text").html("戦闘ではまず敵のスキルが発動します<br>その後敵の攻撃<br>敵攻撃-自防御 の値がダメージです");
-                            break
-                            case 2:
-                                status(hp,ap,dp,ehp,eap,edp);
-                                $(".downer-box-text").html("そのあと自分の攻撃になります<br>自攻撃-敵防御 が敵体力から減らされます");
-                            break
-                            case 3:
-                                status(hp,ap,dp,ehp,eap,edp);
-                                $(".downer-box-text").html("勝利条件は、敵の体力を０にすること<br>敗北条件は、自分の体力が０になるか<br>１０ターン経過時、敵を倒せなかった場合です");
-                            break
-                            case 4:
-                                status(hp,ap,dp,ehp,eap,edp);
-                                $(".downer-box-text").html("ちなみに全部の値を始めに<br>割り振らず、余らせても大丈夫です<br>では模擬戦闘スタート");
+                                $(".downer-box-text").html("では模擬戦闘を始めます<br>貴方は戦いを見守るだけです<br>負けてもまた挑戦できますよ");
                                 button = 9;
                             break
+                            
                         }
                     }else if(turn === 11){
                         //ゲームオーバ処理

@@ -7,7 +7,6 @@
 </head>
 <body>
     <script src="jquery-3.5.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
     <script src="./main.js"></script>
     <div class="outside">
 
@@ -20,14 +19,12 @@
             <img src="" alt="">
         </div>
         <div class="downer-box">
-            <p class="downer-box-text">ゲーム作者:みんまる<br>BGM:魔王魂 様</p>
+            <p class="downer-box-text">ゲーム作者:みんまる<br>BGM:魔王魂 様<br>（https://maoudamashii.jokersounds.com/）</p>
         </div>
     </div>
     <button class="bgm" id="mid">音量　中</button>
     <button class="bgm" id="lit">音量　小</button>
     <button class="bgm" id="mute">ミュート</button>
-    <!--<button class="bt" id="two">表示2秒</button>
-    <button class="bt" id="three">表示3秒</button>
-    <button class="bt" id="five">表示5秒</button>-->
+    
 </body>
 </html>
